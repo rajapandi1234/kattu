@@ -11,8 +11,12 @@ on:
         description: 'Version of the Docker image'
         required: true
         type: string
-      secrets:
-        dev_namespace_docker_hub:
+      service_name:
+        description: 'Name of the service'
+        required: true
+        type: string
+    secrets:
+      dev_namespace_docker_hub:
         required: true
 
 jobs:
@@ -20,7 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NAMESPACE: ${{ secrets.dev_namespace_docker_hub }}
-      SERVICE_NAME: partner-onboarder
 
     steps:
       - name: Checkout code
@@ -29,12 +32,12 @@ jobs:
       - name: Build Docker image
         run: |
           cd "${{ inputs.service_location }}"
-          docker build . --file Dockerfile --tag ${{ env.SERVICE_NAME }}:${{ inputs.version }}
+          docker build . --file Dockerfile --tag ${{ inputs.service_name }}:${{ inputs.version }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'docker.io/${{ env.SERVICE_NAME }}:${{ inputs.version }}'
+          image-ref: 'docker.io/${{ inputs.service_name }}:${{ inputs.version }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
 
