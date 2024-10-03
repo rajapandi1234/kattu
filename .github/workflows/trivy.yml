@@ -3,16 +3,8 @@ name: Trivy Scan
 on:
   workflow_call:
     inputs:
-      service_location:
-        description: 'Location of the service'
-        required: true
-        type: string
-      version:
-        description: 'Version of the Docker image'
-        required: true
-        type: string
-      service_name:
-        description: 'Name of the service'
+      image_ref:
+        description: 'Docker image reference'
         required: true
         type: string
     secrets:
@@ -22,22 +14,12 @@ on:
 jobs:
   trivy-scan:
     runs-on: ubuntu-latest
-    env:
-      NAMESPACE: ${{ secrets.dev_namespace_docker_hub }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Build Docker image
-        run: |
-          cd "${{ inputs.service_location }}"
-          docker build . --file Dockerfile --tag ${{ inputs.service_name }}:${{ inputs.version }}
-
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'docker.io/${{ inputs.service_name }}:${{ inputs.version }}'
+          image-ref: ${{ inputs.image_ref }}
           format: 'sarif'
           output: 'trivy-results.sarif'
 
