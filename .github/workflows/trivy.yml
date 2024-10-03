@@ -1,24 +1,19 @@
 name: Trivy Scan
 
 on:
-  push:
-    branches:
-      - main
-      - 'release-1*'
-      - develop
-      - '1.2.*'
-      - master
-      - test
-      - MOSIP-35889
-  pull_request:
-    branches:
-      - main
-      - 'release-1*'
-      - develop
-      - '1.2.*'
-      - master
-      - test
-      - MOSIP-35889
+  workflow_call:
+    inputs:
+      service_location:
+        description: 'Location of the service'
+        required: true
+        type: string
+      version:
+        description: 'Version of the Docker image'
+        required: true
+        type: string
+    secrets:
+      dev_namespace_docker_hub:
+        required: true
 
 jobs:
   trivy-scan:
@@ -26,7 +21,6 @@ jobs:
     env:
       NAMESPACE: ${{ secrets.dev_namespace_docker_hub }}
       SERVICE_NAME: partner-onboarder
-      VERSION: latest  # Modify this as needed or set dynamically based on your versioning scheme
 
     steps:
       - name: Checkout code
@@ -34,16 +28,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd "${{ env.SERVICE_LOCATION }}"
-          docker build . --file Dockerfile --tag ${{ env.SERVICE_NAME }}:${{ env.VERSION }}
+          cd "${{ inputs.service_location }}"
+          docker build . --file Dockerfile --tag ${{ env.SERVICE_NAME }}:${{ inputs.version }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          image-ref: 'docker.io/${{ env.SERVICE_NAME }}:${{ env.VERSION }}'
+          image-ref: 'docker.io/${{ env.SERVICE_NAME }}:${{ inputs.version }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
-          
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
