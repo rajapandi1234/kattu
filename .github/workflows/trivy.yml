@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "SERVICE_NAME=${{ inputs.service_name }}" >> $GITHUB_ENV
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BRANCH_NAME=${{ github.head_ref }}
+            BRANCH_NAME=${{ github.base_ref }}
           else
             BRANCH_NAME=${{ github.ref_name }}
           fi
