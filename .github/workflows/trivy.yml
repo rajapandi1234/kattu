@@ -19,8 +19,8 @@ jobs:
       - name: Set environment variables
         run: |
           echo "SERVICE_NAME=${{ inputs.service_name }}" >> $GITHUB_ENV
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}")
-          echo "VERSION=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=$(echo ${{ github.ref }} | sed -e 's,.*/\(.*\),\1,')" >> $GITHUB_ENV
+          VERSION=$BRANCH_NAME
 
       - name: Checkout code
         uses: actions/checkout@v3
