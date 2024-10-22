@@ -7,10 +7,6 @@ on:
         description: 'Name of the service'
         required: true
         type: string
-      version:
-        description: 'Version of the service'
-        required: true
-        type: string
 
 jobs:
   trivy_scan:
@@ -19,7 +15,7 @@ jobs:
       - name: Set environment variables
         run: |
           echo "SERVICE_NAME=${{ inputs.service_name }}" >> $GITHUB_ENV
-          echo VERSION=$BRANCH_NAME >> $GITHUB_ENV
+          echo "VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Checkout code
         uses: actions/checkout@v3
