@@ -19,7 +19,7 @@ jobs:
       - name: Set environment variables
         run: |
           echo "SERVICE_NAME=${{ inputs.service_name }}" >> $GITHUB_ENV
-          echo "VERSION=${{ inputs.version }}" >> $GITHUB_ENV
+          echo VERSION=$BRANCH_NAME >> $GITHUB_ENV
 
       - name: Checkout code
         uses: actions/checkout@v3
