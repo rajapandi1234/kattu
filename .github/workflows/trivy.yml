@@ -20,6 +20,11 @@ jobs:
         run: |
           echo "SERVICE_NAME=${{ inputs.service_name }}" >> $GITHUB_ENV
           echo "BRANCH_NAME=$(echo ${{ github.ref }} | sed -e 's,.*/\(.*\),\1,')" >> $GITHUB_ENV
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo "push version ${{steps.getPomVersion.outputs.info}}"
+          if [[ $BRANCH_NAME == master ]]; then
+          VERSION=latest
+          else
           VERSION=$BRANCH_NAME
 
       - name: Checkout code
