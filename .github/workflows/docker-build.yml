@@ -29,8 +29,7 @@ on:
         required: true
       DEV_NAMESPACE_DOCKER_HUB:
         required: true
-      SLACK_WEBHOOK_URL:
-        required: true
+
 
 jobs:
   build-dockers:
