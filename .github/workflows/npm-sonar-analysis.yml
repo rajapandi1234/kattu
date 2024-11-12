@@ -47,7 +47,7 @@ on:
       ORG_KEY:
         required: true
       SLACK_WEBHOOK_URL:
-        required: true
+        required: false
 
 env:
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
