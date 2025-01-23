@@ -23,6 +23,8 @@ env:
 jobs:
   npm-build:
     runs-on: ubuntu-latest
+    env:
+      CI: false
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
