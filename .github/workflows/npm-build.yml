@@ -18,7 +18,7 @@ on:
         required: true
 
 env:
-  ZIP_DIR: 'dist'
+  ZIP_DIR: 'build'
 
 jobs:
   npm-build:
