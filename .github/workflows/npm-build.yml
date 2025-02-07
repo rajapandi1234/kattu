@@ -3,6 +3,9 @@ name: NPM Build
 on:
   workflow_call:
     inputs:
+      ZIP_DIR: 
+        required: false
+        type: string
       BUILD_ARTIFACT:
         required: true
         type: string
@@ -50,7 +53,7 @@ jobs:
        CI: false
       if: ${{ inputs.NPM_BUILD_TYPE == 'BOB' }}
       run: |
-        echo "ZIP_DIR=build" >> $GITHUB_ENV
+        echo "ZIP_DIR=${{ inputs.ZIP_DIR }}" >> $GITHUB_ENV
         cd ${{ inputs.SERVICE_LOCATION }} && npm run build
 
     - name: Zip Build Application
